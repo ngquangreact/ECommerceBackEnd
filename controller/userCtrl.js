@@ -456,6 +456,18 @@ const getAllOrder = asyncHandler(async (req, res) => {
   }
 });
 
+const getOrdersByUserId = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const order = await Order.find({ orderBy: id })
+      .populate(["products.product", "orderBy"])
+      .exec();
+    res.json(order);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 const updateOrderStatus = asyncHandler(async (req, res) => {
   const { status } = req.body;
   const { id } = req.params;
@@ -501,5 +513,6 @@ module.exports = {
   createOrder,
   getOrders,
   getAllOrder,
+  getOrdersByUserId,
   updateOrderStatus,
 };
